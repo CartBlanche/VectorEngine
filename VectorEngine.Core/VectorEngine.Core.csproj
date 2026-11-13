@@ -29,6 +29,5 @@
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="VectorEngine.Tests" />
-    <InternalsVisibleTo Include="VectorRumble.Tests" />
   </ItemGroup>
 </Project>

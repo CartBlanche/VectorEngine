@@ -75,9 +75,10 @@ namespace VectorEngine.Networking
         }
 
         /// <summary>
-        /// Dispatch one payload (type byte followed by the packet body)
+        /// Dispatch one payload: <c>[protocol version][packet id][body]</c>. The network manager calls this for every packet it
+        /// receives; a game's tests can call it to feed a made-up packet to its handlers without a session.
         /// </summary>
-        internal void Dispatch(NetworkGamer sender, byte[] payload, bool localIsHost)
+        public void Dispatch(NetworkGamer sender, byte[] payload, bool localIsHost)
         {
             // payload: [protocol version][packet id][body]
             if (payload.Length < 2)
