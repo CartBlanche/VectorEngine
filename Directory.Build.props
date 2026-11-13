@@ -1,10 +1,39 @@
 <Project>
-  <!-- Engine-local props: stops VectorRumble/Directory.Build.props (title, version) leaking in, and
-       gives SolidOps (which has no props file) the same MonoGame pin when it references the engine. -->
+  <!-- One MonoGame version for the whole engine. Games must reference the same MonoGame.Framework.* version. -->
   <PropertyGroup>
     <MonoGameVersion>3.8.6.1</MonoGameVersion>
-    <AssemblyCompany>CartBlanche</AssemblyCompany>
-    <AssemblyProduct>VectorEngine</AssemblyProduct>
-    <Version>0.1.0</Version>
   </PropertyGroup>
+
+  <!-- Version: 0.1.0-preview.1 until the engine has shipped a game from the NuGet packages. -->
+  <PropertyGroup>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>preview.1</VersionSuffix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>CartBlanche</Authors>
+    <Company>CartBlanche</Company>
+    <Product>VectorEngine</Product>
+    <Copyright>Copyright © 2026 CartBlanche</Copyright>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CartBlanche/VectorEngine</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CartBlanche/VectorEngine.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>monogame;game-engine;vector-graphics;line-rendering;xna;neon</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <!-- On a CI build the paths in the symbols are rewritten so they work on any machine -->
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.404" PrivateAssets="All" />
+  </ItemGroup>
 </Project>

@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DotnetVersion: 10.0.x
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ env.DotnetVersion }}
+    - name: Build
+      run: dotnet build VectorEngine.sln -c Release
+    - name: Test
+      run: dotnet test VectorEngine.sln -c Release --no-build
+    - name: Pack
+      run: dotnet pack VectorEngine.sln -c Release --no-build -o nupkgs
+    - uses: actions/upload-artifact@v6
+      with:
+        name: nupkgs
+        path: nupkgs/*

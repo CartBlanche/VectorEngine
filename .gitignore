@@ -1,3 +1,10 @@
-# MGCB build output
-Content/bin/
-Content/obj/
+bin/
+obj/
+TestResults/
+artifacts/
+nupkgs/
+.vs/
+.idea/
+*.user
+*.suo
+.DS_Store

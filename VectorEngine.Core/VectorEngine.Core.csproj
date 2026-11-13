@@ -7,6 +7,8 @@
     <RootNamespace>VectorEngine</RootNamespace>
     <AssemblyName>VectorEngine.Core</AssemblyName>
     <AssemblyDescription>Shared vector game engine core</AssemblyDescription>
+    <PackageId>VectorEngine.Core</PackageId>
+    <Description>A small MonoGame engine for neon vector-line games: game base class, screens and menus, input and bindings, line rendering with bloom, audio, settings, localization, particles, world simulation and a start-up splash. Games reference their own MonoGame.Framework.* package at the same version.</Description>
   </PropertyGroup>
   <ItemGroup>
     <!-- Compile-time only: the game head supplies the real platform framework. No Net package here. -->
@@ -18,6 +20,13 @@
     <!-- dotnet build -c Release -p:PerfOverlay=true: puts the frame time / GC / draw call overlay in a Release build -->
     <DefineConstants>$(DefineConstants);PERF_OVERLAY</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- Shipped in the package: the readme, and the engine's shaders with a .targets that adds them to the game's content build -->
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\Content\Engine.mgcb" Pack="true" PackagePath="build\" />
+    <None Include="..\Content\Effects\*" Pack="true" PackagePath="build\Effects\" />
+    <None Include="build\VectorEngine.Core.targets" Pack="true" PackagePath="build\" />
+  </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="VectorEngine.Tests" />
     <InternalsVisibleTo Include="VectorRumble.Tests" />

@@ -1,0 +1,24 @@
+<Project>
+  <!-- Adds the engine's own shaders (bloom, blur) to the game's MonoGame content build.
+       The shaders are copied into the game's obj folder first, so the content builder never writes into the NuGet cache.
+       The game's head project also needs MonoGame.Content.Builder.Task and the dotnet-mgcb tool (as any MonoGame game does).
+       Set <VectorEngineContent>false</VectorEngineContent> to build the shaders yourself. -->
+  <PropertyGroup>
+    <VectorEngineContentStage>$(MSBuildProjectDirectory)/$(IntermediateOutputPath)VectorEngineContent/</VectorEngineContentStage>
+  </PropertyGroup>
+
+  <Target Name="VectorEngineStageContent"
+          BeforeTargets="CollectContentReferences"
+          Condition="'$(VectorEngineContent)' != 'false'">
+    <ItemGroup>
+      <_VectorEngineShader Include="$(MSBuildThisFileDirectory)Effects/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_VectorEngineShader)" DestinationFolder="$(VectorEngineContentStage)Effects" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)Engine.mgcb" DestinationFolder="$(VectorEngineContentStage)" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <MonoGameContentReference Include="$(VectorEngineContentStage)Engine.mgcb">
+        <Link>Content\Engine.mgcb</Link>
+      </MonoGameContentReference>
+    </ItemGroup>
+  </Target>
+</Project>

@@ -7,7 +7,12 @@
     <RootNamespace>VectorEngine.Networking</RootNamespace>
     <AssemblyName>VectorEngine.Networking</AssemblyName>
     <AssemblyDescription>Optional LAN networking for Vector Engine games</AssemblyDescription>
+    <PackageId>VectorEngine.Networking</PackageId>
+    <Description>Optional LAN multiplayer for VectorEngine games: session discovery and lobby plumbing, a versioned packet dispatcher and ping/pong packets, on MonoGame.Xna.Framework.Net. Prerelease because that package is.</Description>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
   <ItemGroup>
     <!-- Compile-time only: the game head supplies the real platform framework. This is the only engine project with the Net package. -->
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)">
