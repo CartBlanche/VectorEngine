@@ -96,6 +96,18 @@ public class Particle
     /// <summary>Optional line width in world pixels for a line particle; 0 (unset) derives it from the scale, as before.</summary>
     public int LineWidth { get; set; }
 
+    /// <summary>
+    /// Optional: alpha lost per second, a fixed amount (so a long-lived particle stays visible longer than a short-lived one) with the byte truncation
+    /// each frame, as VectorRumble's old particle system did. NaN (unset) fades over the particle's life instead.
+    /// </summary>
+    public float AlphaFadePerSecond { get; set; } = float.NaN;
+
+    /// <summary>
+    /// Optional: a line particle's tail is its velocity times this (it shrinks as the particle slows), drawn back from the particle. NaN (unset) uses
+    /// <see cref="StreakLength"/> or the previous position.
+    /// </summary>
+    public float VelocityTail { get; set; } = float.NaN;
+
     /// <summary>False keeps the colour's alpha for the whole life, e.g. a falling drop that disappears at the landing.</summary>
     public bool FadesOut { get; set; } = true;
 
@@ -169,9 +181,11 @@ public class Particle
     }
 
     // Update particle's position and reduce its lifespan
-    public void Update(GameTime gameTime)
+    public void Update(GameTime gameTime) => Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+    /// <summary>The same step for a plain number of seconds, so particles can be advanced without a <see cref="GameTime"/> (tests, headless effects).</summary>
+    public void Update(float elapsedTime)
     {
-        var elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         // Store previous position before updating
         PreviousPosition = Position;
@@ -187,8 +201,12 @@ public class Particle
         // Reduce it's life time over time
         LifeTime -= elapsedTime;
 
+        if (!float.IsNaN(AlphaFadePerSecond))
+        {
+            Color = new Color(Color.R, Color.G, Color.B, (byte)((float)Color.A - AlphaFadePerSecond * elapsedTime));
+        }
         // Fade Colour over lifetime (normalized to original lifetime)
-        if (!FadeWithScale && FadesOut)
+        else if (!FadeWithScale && FadesOut)
         {
             if (OriginalLifeTime > 0f)
             {
