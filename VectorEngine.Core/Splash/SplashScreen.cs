@@ -54,6 +54,9 @@ public class SplashScreen : GameScreen
         manager.AddScreen(screen, player);
     }
 
+    /// <summary>Input in the first moments is ignored: keys and clicks from launching the game are still arriving then.</summary>
+    const float SkipGraceSeconds = 0.5f;
+
     float FadeStart => SplashAnimation.Seconds + options.HoldSeconds;
     float End => FadeStart + options.FadeOutSeconds;
 
@@ -86,7 +89,7 @@ public class SplashScreen : GameScreen
         if (options.WaitForSpace || Environment.GetEnvironmentVariable("VECTORENGINE_SPLASH_WAIT") == "1")
             return;
 
-        if (options.Skippable && !finished && elapsed < FadeStart && AnyNewInput(input))
+        if (options.Skippable && !finished && elapsed > SkipGraceSeconds && elapsed < FadeStart && AnyNewInput(input))
             Skip();
     }
 
@@ -107,7 +110,9 @@ public class SplashScreen : GameScreen
             if (input.CurrentKeyboardStates[i].GetPressedKeyCount() > input.LastKeyboardStates[i].GetPressedKeyCount())
                 return true;
 
-        if (input.IsLeftMouseButtonClicked() || input.IsRightMoustButtonClicked())
+        // a button going down, not coming up: the release of the click that started the game is not a skip
+        if (input.CurrentMouseState.LeftButton == ButtonState.Pressed && input.LastMouseState.LeftButton == ButtonState.Released ||
+            input.CurrentMouseState.RightButton == ButtonState.Pressed && input.LastMouseState.RightButton == ButtonState.Released)
             return true;
 
         foreach (var touch in input.CurrentTouchState)
