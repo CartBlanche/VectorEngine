@@ -6,8 +6,16 @@ on:
   pull_request:
     branches: [ main ]
 
+# VectorEngine.Networking needs MonoGame.Xna.Framework.Net, which is on this account's GitHub Packages feed (needs a token to read).
+permissions:
+  contents: read
+  packages: read
+
 env:
   DotnetVersion: 10.0.x
+  # The default token can read it once the package's "Manage Actions access" lists this repository; otherwise add a
+  # PACKAGES_TOKEN secret (a personal access token with read:packages) and it is used instead.
+  PackagesFeed: https://nuget.pkg.github.com/CartBlanche/index.json
 
 jobs:
   build:
@@ -17,6 +25,8 @@ jobs:
     - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ env.DotnetVersion }}
+    - name: Add the GitHub Packages feed
+      run: dotnet nuget add source "$PackagesFeed" --name github-cartblanche --username "${{ github.repository_owner }}" --password "${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}" --store-password-in-clear-text
     - name: Build
       run: dotnet build VectorEngine.sln -c Release
     - name: Test
