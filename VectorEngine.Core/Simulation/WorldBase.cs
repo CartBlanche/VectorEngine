@@ -2,24 +2,24 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using VectorEngine.Collections;
+using VectorEngine.Effects;
 using VectorEngine.Rendering;
 
 namespace VectorEngine.Simulation
 {
     /// <summary>
-    /// The shared physics of a Vector Engine world: the actors and particle systems, and each frame's moving, colliding
+    /// The shared physics of a Vector Engine world: the actors and the particle effects, and each frame's moving, colliding
     /// and bouncing off walls. A game derives from it and adds what is its own (the arena or level, the managers, the
     /// rules), supplying its walls through <see cref="Walls"/>.
     /// </summary>
     /// <remarks>
     /// The order of an update is fixed: every actor updates, then the world moves and collides, then the particle
-    /// systems update, then <see cref="OnUpdated"/> runs, then the lists are cleaned up.
+    /// effects update, then <see cref="OnUpdated"/> runs, then the lists are cleaned up.
     /// </remarks>
     public abstract class WorldBase
     {
         readonly Vector2 dimensions;
         readonly CollectCollection<Actor> actors = new CollectCollection<Actor>();
-        readonly CollectCollection<ParticleSystem> particleSystems = new CollectCollection<ParticleSystem>();
         readonly List<CollisionResult> collisionResults = new List<CollisionResult>();
 
         /// <summary>The world's random numbers (spawn points and the like). Replace it to make a run repeatable.</summary>
@@ -34,8 +34,11 @@ namespace VectorEngine.Simulation
         /// <summary>Every actor in the world.</summary>
         public CollectCollection<Actor> Actors => actors;
 
-        /// <summary>Every particle system in the world.</summary>
-        public CollectCollection<ParticleSystem> ParticleSystems => particleSystems;
+        /// <summary>
+        /// The world's explosions and other particle effects (<see cref="ParticleEffects"/>), updated each frame after the actors and collision.
+        /// Headless by default; a game that draws them puts a <see cref="ParticleManager"/> here while its screen is showing the world.
+        /// </summary>
+        public ParticleField Particles { get; set; } = new ParticleField();
 
         /// <summary>
         /// The actor that stands in for the walls: an actor with <see cref="WallBehavior.Touch"/> touches it where it
@@ -63,7 +66,7 @@ namespace VectorEngine.Simulation
         /// </summary>
         protected virtual bool NeedsExtraSpawnRoom(Actor actor) => false;
 
-        /// <summary>Runs in <see cref="Update"/> after the particle systems and before the lists are cleaned up.</summary>
+        /// <summary>Runs in <see cref="Update"/> after the particle effects and before the lists are cleaned up.</summary>
         protected virtual void OnUpdated(float elapsedTime)
         {
         }
@@ -84,21 +87,13 @@ namespace VectorEngine.Simulation
             // update collision
             MoveWorld(elapsedTime);
 
-            // update particle systems
-            for (int i = 0; i < particleSystems.Count; i++)
-            {
-                particleSystems[i].Update(elapsedTime);
-                if (particleSystems[i].IsActive == false)
-                {
-                    particleSystems.Garbage.Add(particleSystems[i]);
-                }
-            }
+            // update the particle effects
+            Particles.Update(elapsedTime);
 
             OnUpdated(elapsedTime);
 
             // clean up the lists
             actors.Collect();
-            particleSystems.Collect();
         }
         #endregion
 

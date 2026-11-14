@@ -18,19 +18,6 @@ public class ParticleEffectTests
         public IReadOnlyList<Particle> Alive => particles;
     }
 
-    // the old ParticleSystem keeps its particles in a private struct array, so read it by reflection
-    static List<(Vector2 pos, Vector2 vel, Color color)> Legacy(ParticleSystem system)
-    {
-        var array = (Array)typeof(ParticleSystem).GetField("particles", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(system);
-        var list = new List<(Vector2, Vector2, Color)>();
-        foreach (var item in array)
-        {
-            var t = item.GetType();
-            list.Add(((Vector2)t.GetField("Position").GetValue(item), (Vector2)t.GetField("Velocity").GetValue(item), (Color)t.GetField("Color").GetValue(item)));
-        }
-        return list;
-    }
-
     static readonly Color[] Palette = { Color.Red, Color.Orange, Color.Yellow, Color.White };
 
     public static IEnumerable<object[]> LegacyBursts()
@@ -45,13 +32,12 @@ public class ParticleEffectTests
 
     [Theory]
     [MemberData(nameof(LegacyBursts))]
-    public void Burst_preset_reproduces_the_classic_particle_system_frame_for_frame(int count, float minV, float maxV, float life, float tail, float dx, float dy)
+    public void Burst_preset_reproduces_the_original_particle_system_frame_for_frame(int count, float minV, float maxV, float life, float tail, float dx, float dy)
     {
         var origin = new Vector2(300, 200);
         var direction = new Vector2(dx, dy);
 
-        ParticleSystem.Random = new Random(1234);
-        var legacy = new ParticleSystem(origin, direction, count, minV, maxV, life, tail, Palette);
+        var legacy = new ReferenceParticleSystem(new Random(1234), origin, direction, count, minV, maxV, life, Palette);
 
         var field = new TestField { Random = new Random(1234) };
         field.Emit(ParticleEffects.Burst(count, minV, maxV, life, tail, Palette), origin, direction);
@@ -60,16 +46,16 @@ public class ParticleEffectTests
         int frames = 0;
         while (legacy.IsActive)
         {
-            var old = Legacy(legacy);
-            Assert.Equal(old.Count, field.Alive.Count);
-            for (int i = 0; i < old.Count; i++)
+            var old = legacy.Particles;
+            Assert.Equal(old.Length, field.Alive.Count);
+            for (int i = 0; i < old.Length; i++)
             {
                 var p = field.Alive[i];
-                Assert.Equal(old[i].pos.X, p.Position.X, 0.01f);
-                Assert.Equal(old[i].pos.Y, p.Position.Y, 0.01f);
-                Assert.Equal(old[i].vel.X, p.CurrentVelocity.X, 0.01f);
-                Assert.Equal(old[i].vel.Y, p.CurrentVelocity.Y, 0.01f);
-                Assert.Equal(old[i].color, p.Color);                      // same colour AND same alpha, byte for byte
+                Assert.Equal(old[i].Position.X, p.Position.X, 0.01f);
+                Assert.Equal(old[i].Position.Y, p.Position.Y, 0.01f);
+                Assert.Equal(old[i].Velocity.X, p.CurrentVelocity.X, 0.01f);
+                Assert.Equal(old[i].Velocity.Y, p.CurrentVelocity.Y, 0.01f);
+                Assert.Equal(old[i].Color, p.Color);                      // same colour AND same alpha, byte for byte
                 Assert.Equal(tail, p.VelocityTail);                       // the line is drawn back along velocity * tail
                 Assert.Equal(1, p.LineWidth);
             }

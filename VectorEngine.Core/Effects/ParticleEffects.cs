@@ -5,7 +5,7 @@ namespace VectorEngine.Effects;
 
 /// <summary>
 /// The engine's ready-made <see cref="ParticleEffect"/>s, the same bursts <see cref="ParticleField.Emit(int, ParticleEffectType, Color?)"/> plays, plus
-/// <see cref="Burst"/>, which reproduces Vector Rumble's classic <see cref="ParticleSystem"/> explosion.
+/// <see cref="Burst"/>, which reproduces Vector Rumble's classic explosion (the old <c>ParticleSystem</c>, since removed).
 /// </summary>
 public static class ParticleEffects
 {
@@ -104,7 +104,7 @@ public static class ParticleEffects
     }
 
     /// <summary>
-    /// Vector Rumble's classic explosion as data, the same particles as <c>new ParticleSystem(position, direction, count, minVelocity, maxVelocity, life,
+    /// Vector Rumble's classic explosion as data, the same particles as the old <c>ParticleSystem(position, direction, count, minVelocity, maxVelocity, life,
     /// tailLength, colors)</c>: every particle shares one lifetime, flies off in a random direction at <c>minVelocity + maxVelocity * random</c> (so the speed
     /// really runs from min to min + max) plus <c>direction</c>, takes a colour from <paramref name="colors"/>, slows by 98% a second and loses 45 alpha a
     /// second, and is drawn as a one pixel line from where it is back along its velocity times <paramref name="tailLength"/>. Play it with

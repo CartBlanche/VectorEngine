@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using VectorEngine.Effects;
 using VectorEngine.Simulation;
 using Xunit;
 
@@ -29,6 +30,21 @@ namespace VectorEngine.Tests
 
         // a vertical wall at x = 500 (the points are fractions of the world's size)
         static TestWorld WorldWithWall() => new TestWorld { WallPairs = new[] { new Vector2(0.5f, 0f), new Vector2(0.5f, 1f) } };
+
+        [Fact]
+        public void The_world_updates_its_particle_effects_before_the_hook_and_they_end_with_their_life()
+        {
+            var world = new TestWorld();
+            world.Particles.Emit(ParticleEffects.Burst(10, 32f, 64f, 1f, 0.05f, Color.White), new Vector2(500, 500));
+            Assert.Equal(10, world.Particles.ParticleCount);
+
+            for (int i = 0; i < 59; i++) world.Update(1f / 60f);
+            Assert.Equal(10, world.Particles.ParticleCount);
+
+            for (int i = 0; i < 3; i++) world.Update(1f / 60f);
+            Assert.Equal(0, world.Particles.ParticleCount);
+            Assert.Equal(62, world.Updated);
+        }
 
         [Fact]
         public void An_actor_bounces_off_a_wall()
