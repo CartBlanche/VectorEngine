@@ -501,6 +501,9 @@ public class ScreenManager : DrawableGameComponent, IRenderContext
     /// </summary>
     public void RefreshScreensAfterLanguageChange()
     {
+        // the font may be a different one for the new language (Chinese and Japanese need their own glyphs)
+        font = options.LoadFont(Game.Content);
+
         foreach (var screen in screens.ToArray())
             if (screen is ILanguageAware aware)
                 aware.OnLanguageChanged();

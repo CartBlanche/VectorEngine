@@ -77,6 +77,24 @@ namespace VectorEngine.Audio
 
         private float menuVolume = 1f;
 
+        /// <summary>
+        /// Sets the volume of an XACT category (a group of sounds the project's author put together, such as Music), 0 to 1.
+        /// A name the project does not have is ignored.
+        /// </summary>
+        public void SetCategoryVolume(string category, float volume)
+        {
+            if (engine == null)
+                return;
+            try
+            {
+                engine.GetCategory(category).SetVolume(volume);
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Audio: could not set the volume of {category}: {ex.Message}");
+            }
+        }
+
         public void PlayCue(string cueName)
         {
             sounds.PlayCue(cueName);
