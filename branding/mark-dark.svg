@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<title>VectorEngine</title>
+<defs>
+<filter id="wide" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="39.32"/></filter>
+<filter id="mid" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="19.66"/></filter>
+</defs>
+<path d="M112.64 121.07L188.54 390.93 M188.54 390.93L298.16 121.07 M188.54 390.93L289.73 390.93 M243.35 256.00L344.55 256.00 M298.16 121.07L399.36 121.07" fill="none" stroke="#ff4fd0" stroke-width="81.92" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" filter="url(#wide)"/>
+<path d="M112.64 121.07L188.54 390.93 M188.54 390.93L298.16 121.07 M188.54 390.93L289.73 390.93 M243.35 256.00L344.55 256.00 M298.16 121.07L399.36 121.07" fill="none" stroke="#ff4fd0" stroke-width="39.32" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" filter="url(#mid)"/>
+<path d="M112.64 121.07L188.54 390.93 M188.54 390.93L298.16 121.07 M188.54 390.93L289.73 390.93 M243.35 256.00L344.55 256.00 M298.16 121.07L399.36 121.07" fill="none" stroke="#ffb0ea" stroke-width="16.38" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

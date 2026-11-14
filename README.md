@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="branding/logo-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="branding/logo-light.png">
+    <img alt="VectorEngine" src="branding/logo-dark.png" width="640">
+  </picture>
+</p>
+
 # VectorEngine
 
 A small [MonoGame](https://monogame.net) engine for neon vector-line games: line rendering with bloom, screens and menus, input and bindings, audio, settings, localization, particles, a world simulation and an optional LAN layer. It grew out of two games that now share it, and it is meant for future ones.
