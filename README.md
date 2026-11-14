@@ -29,7 +29,7 @@ Made a game with VectorEngine? Open a pull request adding it to this table.
 - **Input**: `InputState`, `ActionBindings` (core `GameAction`s plus your own via `bindings.Define(new ActionId("Send"), ...)`; the saved settings format keeps action names) and `VirtualGamePad`, a data-driven touch gamepad with a `VirtualGamePadLayout`.
 - **Rendering**: `Display` (virtual resolution, default 720p; `Display.Configure` changes it), `LineBatch`, `VectorPolygon`, `BloomComponent`.
 - **Simulation**: `WorldBase`, `Actor`, `WorldActor`, `CollisionResult`. A game derives its own `World` and actors. The update order is fixed: actors, collision, particle systems, a hook, then collection.
-- **Effects**: `ParticleManager` and the older `ParticleSystem`.
+- **Effects**: effects are data. A `ParticleEffect` describes a burst (count, direction, speed, life, colour, shape, fade, gravity, drag, tails, a follow-up effect where each particle dies); `ParticleEffects` has the built-in presets (`Confetti`, `Explosions`, `Fireworks`, `Sparkles`) and `Burst(...)`, which reproduces Vector Rumble's classic explosion exactly. `ParticleField` plays them with no graphics (so they are tested headless, and a seeded `Random` repeats a burst); `ParticleManager` is a `ParticleField` that also draws. A game registers its own: `effects.Register("shipBoom", ParticleEffects.Burst(128, 64f, 256f, 3f, 0.05f, colors));` then `effects.Emit("shipBoom", position)`. The older `ParticleSystem` is still there for code that has not moved.
 - **Splash**: `SplashScreen.Start(manager, first)` plays the VectorEngine start-up animation (lines converge into the V+E mark and the name), then runs `first` to add the game's first screens. `VECTORENGINE_NO_SPLASH=1` skips it; `VECTORENGINE_SPLASH_WAIT=1` holds on the first frame until Space, for recording.
 - **Settings, localization, audio, diagnostics**: `SettingsManager`, `LocalizationManager`, `AudioManager` (XACT projects), `PerfOverlay`, `AllocProbe`, and `Platform` (mobile or desktop).
 
@@ -75,7 +75,7 @@ dotnet pack VectorEngine.sln -c Release -o nupkgs
 ## Known gaps
 
 - Verified on Desktop and Android only.
-- `ParticleSystem` is still used by Vector Rumble's menu fireworks; it will be replaced by `ParticleManager` presets.
+- `ParticleSystem` is still used by Vector Rumble's and Solid Ops' explosions and the menu fireworks. `ParticleEffects.Burst` plays the same particles (tested frame for frame), so a game can switch when it likes; the games have not yet.
 - Solid Ops' waypoint actor stays in Solid Ops: it depends on its own behaviour classes.
 - The virtual gamepad's default art is Vector Rumble's `Textures/gamepad.png`; the game supplies the texture.
 - A shared engine logo file (icon, banner) is still to make from the mark's geometry in `VectorEngineLogo`.
