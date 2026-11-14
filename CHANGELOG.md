@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.1.0-preview.4 (unreleased)
+## 0.1.0-preview.5
+
+- The start-up splash shows "VectorEngine <version>" in the bottom right corner (`SplashOptions.ShowVersion`, on by default). `EngineInfo.Version` is read from the built assembly, so it follows the package version.
+- `SplashOptions.BloomIntensity`: a game can tone the intro's bloom down without changing the bloom of the rest of the game.
+- The splash is no longer cut short by the click or key that launched the game: input in its first half second is ignored, and a mouse release does not skip it.
+- `ScreenManager` reloads its font after a language change, and `AudioManager.SetCategoryVolume` sets the volume of an XACT category (music and effects sliders).
+
+## 0.1.0-preview.4
 
 - **Breaking:** `ParticleSystem` and `WorldBase.ParticleSystems` are removed. A world now has `WorldBase.Particles`, a `ParticleField` updated where the particle systems were; play `ParticleEffects.Burst(...)` (or any `ParticleEffect`) into it. Both games moved over; `Burst` is tested frame for frame against the original system (kept in the tests as a reference).
 
