@@ -57,6 +57,10 @@ public class SplashScreen : GameScreen
     /// <summary>Input in the first moments is ignored: keys and clicks from launching the game are still arriving then.</summary>
     const float SkipGraceSeconds = 0.5f;
 
+    // the version comes up late in the animation, when the logo is nearly whole, and does not compete with it
+    const float VersionShownAt = 1.4f;
+    const float VersionFadeInSeconds = 0.6f;
+
     float FadeStart => SplashAnimation.Seconds + options.HoldSeconds;
     float End => FadeStart + options.FadeOutSeconds;
 
@@ -184,6 +188,32 @@ public class SplashScreen : GameScreen
             if (shared != null)
                 ScreenManager.BloomComponent.Settings = shared;
         }
+
+        if (options.ShowVersion)
+            DrawVersion(fade);
+    }
+
+    /// <summary>"VectorEngine 0.1.0-preview.5" in the bottom right corner, fading in once the letters have settled and out with the logo.</summary>
+    void DrawVersion(float fade)
+    {
+        SpriteFont font = ScreenManager.Font;
+        if (font == null)
+            return;
+
+        float alpha = fade * MathHelper.Clamp((elapsed - VersionShownAt) / VersionFadeInSeconds, 0f, 1f);
+        if (alpha <= 0.004f)
+            return;
+
+        const float scale = 0.5f;
+        const float margin = 28f;
+        string text = EngineInfo.Name + " " + EngineInfo.Version;
+        Vector2 size = font.MeasureString(text) * scale;
+        Vector2 at = new(Display.BaseWidth - margin - size.X, Display.BaseHeight - margin - size.Y);
+
+        var batch = ScreenManager.SpriteBatch;
+        batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, ScreenManager.GlobalTransformation);
+        batch.DrawString(font, text, at, options.TextColor * (alpha * 0.75f), 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+        batch.End();
     }
 
     /// <summary>A line of the given pixel width, as a rectangle with square ends a half-width long.</summary>

@@ -37,6 +37,9 @@ public sealed class SplashOptions
     /// shared bloom as it is. Only the splash is changed: the bloom goes back to its own setting when the splash has drawn.</summary>
     public float? BloomIntensity { get; init; }
 
+    /// <summary>Shows the engine's name and version (<see cref="EngineInfo.Version"/>) in the bottom right corner while the logo is up.</summary>
+    public bool ShowVersion { get; init; } = true;
+
     /// <summary>For recording: holds on the first frame until Space is pressed, then runs through without skipping.
     /// <c>SplashScreen.Start</c> also turns it on when the environment variable <c>VECTORENGINE_SPLASH_WAIT=1</c> is set.</summary>
     public bool WaitForSpace { get; init; }
