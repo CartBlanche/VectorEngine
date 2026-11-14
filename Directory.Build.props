@@ -21,6 +21,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>monogame;game-engine;vector-graphics;line-rendering;xna;neon</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon-tile-128.png</PackageIcon>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -34,6 +35,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- the package icon: the opaque tile, since nuget.org shows it on white and the neon needs its dark square -->
+    <None Include="$(MSBuildThisFileDirectory)branding\icon-tile-128.png" Pack="true" PackagePath="\" Visible="false" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.404" PrivateAssets="All" />
   </ItemGroup>
 </Project>
