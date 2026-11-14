@@ -75,7 +75,8 @@ dotnet pack VectorEngine.sln -c Release -o nupkgs
 ## Known gaps
 
 - Verified on Desktop and Android only.
-- `ParticleSystem` is still used by Vector Rumble's and Solid Ops' explosions and the menu fireworks. `ParticleEffects.Burst` plays the same particles (tested frame for frame), so a game can switch when it likes; the games have not yet.
+- Particle effects are defined in code; loading them from a file (JSON) is planned before v1.0.
+- `ParticleSystem` is still used by Vector Rumble's and Solid Ops' explosions (the menu fireworks already use `Burst`). `ParticleEffects.Burst` plays the same particles (tested frame for frame), so a game can switch when it likes; the games have not yet.
 - Solid Ops' waypoint actor stays in Solid Ops: it depends on its own behaviour classes.
 - The virtual gamepad's default art is Vector Rumble's `Textures/gamepad.png`; the game supplies the texture.
 - A shared engine logo file (icon, banner) is still to make from the mark's geometry in `VectorEngineLogo`.
