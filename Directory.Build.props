@@ -4,10 +4,10 @@
     <MonoGameVersion>3.8.6.1</MonoGameVersion>
   </PropertyGroup>
 
-  <!-- Version: 0.1.0-preview.1 until the engine has shipped a game from the NuGet packages. -->
+  <!-- Version: 0.1.0-preview.N until the engine has shipped a game from the NuGet packages. -->
   <PropertyGroup>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>preview.1</VersionSuffix>
+    <VersionSuffix>preview.2</VersionSuffix>
   </PropertyGroup>
 
   <PropertyGroup>
