@@ -147,8 +147,18 @@ public class SplashScreen : GameScreen
                              Display.BaseHeight / 2f - VectorEngineLogo.Height * scale / 2f);
 
         bool bloom = options.UseBloom && ScreenManager.BloomComponent != null;
+        BloomSettings shared = null;
         if (bloom)
+        {
+            if (options.BloomIntensity is float intensity)
+            {
+                // the splash's own strength, put back after this frame
+                shared = ScreenManager.BloomComponent.Settings;
+                ScreenManager.BloomComponent.Settings = new BloomSettings(shared.Name, shared.BloomThreshold, shared.BlurAmount,
+                    intensity, shared.BaseIntensity, shared.BloomSaturation, shared.BaseSaturation);
+            }
             ScreenManager.BloomComponent.BeginDraw();
+        }
 
         var batch = ScreenManager.LineBatch;
         batch.Begin(ScreenManager.GlobalTransformation);
@@ -169,7 +179,11 @@ public class SplashScreen : GameScreen
         batch.End();
 
         if (bloom)
+        {
             ScreenManager.BloomComponent.Draw(gameTime);
+            if (shared != null)
+                ScreenManager.BloomComponent.Settings = shared;
+        }
     }
 
     /// <summary>A line of the given pixel width, as a rectangle with square ends a half-width long.</summary>

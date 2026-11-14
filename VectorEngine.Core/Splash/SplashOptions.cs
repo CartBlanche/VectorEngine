@@ -33,6 +33,10 @@ public sealed class SplashOptions
     /// (the splash then glows from layered wide, faint strokes only).</summary>
     public bool UseBloom { get; init; } = true;
 
+    /// <summary>How strong the splash's bloom is (the shared bloom's own setting is 3 in the default "Neon" preset). Null leaves the
+    /// shared bloom as it is. Only the splash is changed: the bloom goes back to its own setting when the splash has drawn.</summary>
+    public float? BloomIntensity { get; init; }
+
     /// <summary>For recording: holds on the first frame until Space is pressed, then runs through without skipping.
     /// <c>SplashScreen.Start</c> also turns it on when the environment variable <c>VECTORENGINE_SPLASH_WAIT=1</c> is set.</summary>
     public bool WaitForSpace { get; init; }
